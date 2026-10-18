@@ -18,12 +18,12 @@ type Result = { output?: string; error?: string };
 type ProgressEvent = { index: number; total: number; input: string; output: string | null; error: string | null };
 
 const FORMATS: Record<Kind, string[]> = {
-  image: ["png", "jpg", "webp", "avif", "tiff", "bmp", "gif"],
-  audio: ["mp3", "wav", "flac", "opus", "m4a", "ogg"],
-  video: ["mp4", "webm", "mov", "gif", "mp3", "m4a"],
+  image: ["png", "jpg", "webp", "avif", "tiff", "bmp", "gif", "ico", "tga", "jp2"],
+  audio: ["mp3", "wav", "flac", "opus", "m4a", "ogg", "aac", "aiff", "ac3", "wma", "mp2"],
+  video: ["mp4", "webm", "mov", "mkv", "avi", "wmv", "flv", "mpg", "ts", "3gp", "m4v", "gif", "mp3", "m4a", "wav", "flac", "aac"],
 };
-const HAS_QUALITY = new Set(["jpg", "webp", "avif", "mp4", "webm", "mov"]);
-const HAS_BITRATE = new Set(["mp3", "opus", "m4a", "ogg"]);
+const HAS_QUALITY = new Set(["jpg", "webp", "avif", "mp4", "webm", "mov", "mkv", "avi", "wmv", "flv", "mpg", "ts", "3gp", "m4v"]);
+const HAS_BITRATE = new Set(["mp3", "opus", "m4a", "ogg", "aac", "ac3", "wma", "mp2"]);
 
 export default function App() {
   const [files, setFiles] = useState<Probe[]>([]);

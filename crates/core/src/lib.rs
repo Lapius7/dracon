@@ -38,19 +38,22 @@ impl Default for Options {
     }
 }
 
-pub const IMAGE_FORMATS: &[&str] = &["png", "jpg", "webp", "avif", "tiff", "bmp", "gif"];
-pub const AUDIO_FORMATS: &[&str] = &["mp3", "wav", "flac", "opus", "m4a", "ogg"];
-pub const VIDEO_FORMATS: &[&str] = &["mp4", "webm", "mov", "gif"];
+pub const IMAGE_FORMATS: &[&str] = &["png", "jpg", "webp", "avif", "tiff", "bmp", "gif", "ico", "tga", "jp2"];
+pub const AUDIO_FORMATS: &[&str] = &["mp3", "wav", "flac", "opus", "m4a", "ogg", "aac", "aiff", "ac3", "wma", "mp2"];
+pub const VIDEO_FORMATS: &[&str] = &["mp4", "webm", "mov", "gif", "mkv", "avi", "wmv", "flv", "mpg", "ts", "3gp", "m4v"];
 
 /// 入力拡張子から種別を判定
 pub fn kind_of(path: &Path) -> Option<Kind> {
     let ext = path.extension()?.to_str()?.to_ascii_lowercase();
     match ext.as_str() {
-        "png" | "jpg" | "jpeg" | "webp" | "avif" | "tif" | "tiff" | "bmp" | "gif" | "heic" | "heif" => {
+        "png" | "jpg" | "jpeg" | "jfif" | "webp" | "avif" | "tif" | "tiff" | "bmp" | "gif" | "heic" | "heif" | "ico"
+        | "tga" | "jp2" | "jxl" => {
             Some(Kind::Image)
         }
-        "mp3" | "wav" | "flac" | "opus" | "m4a" | "aac" | "ogg" => Some(Kind::Audio),
-        "mp4" | "mov" | "mkv" | "webm" | "avi" | "m4v" => Some(Kind::Video),
+        "mp3" | "wav" | "flac" | "opus" | "m4a" | "aac" | "ogg" | "wma" | "aiff" | "aif" | "ac3" | "mp2" | "mka"
+        | "weba" | "amr" => Some(Kind::Audio),
+        "mp4" | "mov" | "mkv" | "webm" | "avi" | "m4v" | "wmv" | "flv" | "mpg" | "mpeg" | "ts" | "mts" | "m2ts"
+        | "3gp" | "ogv" | "vob" => Some(Kind::Video),
         _ => None,
     }
 }
@@ -108,7 +111,9 @@ pub fn build_args(input: &Path, output: &Path, opts: &Options) -> Result<Vec<Str
         }
         "webp" => a.extend([s("-c:v"), s("libwebp"), s("-quality"), opts.quality.unwrap_or(85).to_string()]),
         "avif" => a.extend([s("-c:v"), s("libaom-av1"), s("-crf"), crf(opts.quality.unwrap_or(80)).to_string(), s("-b:v"), s("0")]),
-        "tiff" | "bmp" => {}
+        "tiff" | "bmp" | "tga" => {}
+        "jp2" => a.extend([s("-c:v"), s("jpeg2000")]),
+        "ico" => a.extend([s("-vf"), s("scale='min(256,iw)':'min(256,ih)':force_original_aspect_ratio=decrease")]),
         "gif" if kind == Kind::Video => {
             let w = opts.gif_width.unwrap_or(480);
             let fps = opts.gif_fps.unwrap_or(12);
@@ -124,7 +129,24 @@ pub fn build_args(input: &Path, output: &Path, opts: &Options) -> Result<Vec<Str
         "opus" => a.extend([s("-c:a"), s("libopus"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(128))]),
         "ogg" => a.extend([s("-c:a"), s("libvorbis"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(160))]),
         "m4a" => a.extend([s("-c:a"), s("aac"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(192)), s("-movflags"), s("+faststart")]),
-        "mp4" | "mov" => a.extend([
+        "aac" => a.extend([s("-c:a"), s("aac"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(192)), s("-f"), s("adts")]),
+        "aiff" => a.extend([s("-c:a"), s("pcm_s16be")]),
+        "ac3" => a.extend([s("-c:a"), s("ac3"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(192))]),
+        "wma" => a.extend([s("-c:a"), s("wmav2"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(192))]),
+        "mp2" => a.extend([s("-c:a"), s("mp2"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(192))]),
+        "wmv" => a.extend([
+            s("-c:v"), s("wmv2"), s("-q:v"), quality_to_qscale(opts.quality.unwrap_or(75)).to_string(),
+            s("-c:a"), s("wmav2"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(192)),
+        ]),
+        "flv" => a.extend([
+            s("-c:v"), s("flv"), s("-q:v"), quality_to_qscale(opts.quality.unwrap_or(75)).to_string(),
+            s("-c:a"), s("libmp3lame"), s("-ar"), s("44100"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(128)),
+        ]),
+        "mpg" => a.extend([
+            s("-c:v"), s("mpeg2video"), s("-q:v"), quality_to_qscale(opts.quality.unwrap_or(75)).to_string(),
+            s("-c:a"), s("mp2"), s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(192)),
+        ]),
+        "mp4" | "mov" | "mkv" | "avi" | "ts" | "3gp" | "m4v" => a.extend([
             s("-c:v"), s("libx264"), s("-crf"), crf(opts.quality.unwrap_or(75)).to_string(),
             s("-pix_fmt"), s("yuv420p"), s("-c:a"), s("aac"),
             s("-b:a"), format!("{}k", opts.audio_bitrate.unwrap_or(192)),
@@ -193,6 +215,18 @@ mod tests {
     fn video_to_audio_drops_video() {
         let a = build_args(Path::new("a.mp4"), Path::new("a.mp3"), &opts("mp3")).unwrap();
         assert!(a.contains(&"-vn".to_string()));
+    }
+
+    #[test]
+    fn new_formats_have_plans() {
+        for (i, f) in [("a.png", "ico"), ("a.png", "tga"), ("a.png", "jp2"), ("a.wav", "aac"), ("a.wav", "wma"),
+                       ("a.mp4", "mkv"), ("a.mp4", "avi"), ("a.mp4", "wmv"), ("a.mp4", "flv"), ("a.mp4", "ts")] {
+            assert!(build_args(Path::new(i), Path::new("o"), &opts(f)).is_ok(), "{i} -> {f}");
+        }
+        assert!(IMAGE_FORMATS.iter().chain(AUDIO_FORMATS).chain(VIDEO_FORMATS).all(|f| {
+            let i = if IMAGE_FORMATS.contains(f) { "a.png" } else if AUDIO_FORMATS.contains(f) { "a.wav" } else { "a.mp4" };
+            build_args(Path::new(i), Path::new("o"), &opts(f)).is_ok()
+        }));
     }
 
     #[test]
