@@ -1,0 +1,61 @@
+/* Hallmark · macrostructure: Workbench · tone: utilitarian · anchor hue: orange 55
+ * theme: custom (vibe: "quiet utility, citrus accent") · paper oklch(98.5% 0.004 85) · accent oklch(66% 0.17 52)
+ * display: system UI stack · body: system UI stack
+ */
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-paper-2);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-paper);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: var(--color-accent-ink);
+  --color-secondary: var(--color-paper-3);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: var(--color-paper-3);
+  --color-muted-foreground: var(--color-ink-2);
+  --color-accent-fg: var(--color-ink);
+  --color-destructive: var(--color-danger);
+  --color-border: var(--color-rule);
+  --color-input: var(--color-rule);
+  --color-ring: var(--color-focus);
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --font-sans: var(--font-body);
+}
+
+:root {
+  --color-paper: oklch(98.5% 0.004 85);
+  --color-paper-2: oklch(96.5% 0.006 85);
+  --color-paper-3: oklch(93.5% 0.008 85);
+  --color-ink: oklch(24% 0.01 60);
+  --color-ink-2: oklch(48% 0.01 60);
+  --color-rule: oklch(88% 0.008 80);
+  --color-accent: oklch(66% 0.17 52);
+  --color-accent-ink: oklch(20% 0.04 52);
+  --color-focus: oklch(55% 0.18 255);
+  --color-danger: oklch(55% 0.2 27);
+  --color-ok: oklch(55% 0.13 150);
+  --font-body: "Segoe UI Variable", "Segoe UI", "Yu Gothic UI", system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 120ms;
+}
+
+html, body { overflow-x: clip; }
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.tnum { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
