@@ -19,6 +19,7 @@ struct Probe {
     path: String,
     name: String,
     kind: Option<String>,
+    size: u64,
 }
 
 /// 同梱 ffmpeg（resources/ffmpeg.exe）を優先し、無ければ PATH の ffmpeg を使う
@@ -42,6 +43,7 @@ fn probe(paths: Vec<String>) -> Vec<Probe> {
             Probe {
                 name: path.file_name().and_then(|n| n.to_str()).unwrap_or(&p).to_string(),
                 kind: kind_of(path).map(|k| format!("{k:?}").to_lowercase()),
+                size: std::fs::metadata(path).map(|m| m.len()).unwrap_or(0),
                 path: p,
             }
         })
@@ -114,7 +116,7 @@ pub fn run() {
             let quit = MenuItem::with_id(app, "quit", "終了", true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&open, &quit])?;
             let mut tray = TrayIconBuilder::new()
-                .tooltip("mikan（Alt を押しながらドラッグで円形メニュー）")
+                .tooltip("mikan（ファイルをドラッグすると円形メニュー）")
                 .menu(&menu)
                 .on_menu_event(|app, e| match e.id.as_ref() {
                     "open" => {
