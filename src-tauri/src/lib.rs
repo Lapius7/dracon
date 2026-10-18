@@ -1,3 +1,4 @@
+mod wheel;
 use mikan_core::{build_args, kind_of, output_path, Options};
 use serde::Serialize;
 use std::path::{Path, PathBuf};
@@ -89,11 +90,57 @@ async fn convert(app: AppHandle, inputs: Vec<String>, options: Options) -> Resul
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
+#[tauri::command]
+fn wheel_busy(busy: bool) {
+    wheel::BUSY.store(busy, std::sync::atomic::Ordering::SeqCst);
+}
+
+#[tauri::command]
+fn wheel_hide() {
+    wheel::hide();
+}
+
 pub fn run() {
+    use tauri::menu::{Menu, MenuItem};
+    use tauri::tray::TrayIconBuilder;
+
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![probe, convert])
+        .invoke_handler(tauri::generate_handler![probe, convert, wheel_busy, wheel_hide])
+        .setup(|app| {
+            wheel::create(app.handle())?;
+            let open = MenuItem::with_id(app, "open", "mikan を開く", true, None::<&str>)?;
+            let quit = MenuItem::with_id(app, "quit", "終了", true, None::<&str>)?;
+            let menu = Menu::with_items(app, &[&open, &quit])?;
+            let mut tray = TrayIconBuilder::new()
+                .tooltip("mikan（Alt を押しながらドラッグで円形メニュー）")
+                .menu(&menu)
+                .on_menu_event(|app, e| match e.id.as_ref() {
+                    "open" => {
+                        if let Some(w) = app.get_webview_window("main") {
+                            let _ = w.show();
+                            let _ = w.set_focus();
+                        }
+                    }
+                    "quit" => app.exit(0),
+                    _ => {}
+                });
+            if let Some(icon) = app.default_window_icon() {
+                tray = tray.icon(icon.clone());
+            }
+            tray.build(app)?;
+            Ok(())
+        })
+        .on_window_event(|win, e| {
+            // メインウィンドウは閉じてもトレイに常駐する
+            if win.label() == "main" {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = e {
+                    api.prevent_close();
+                    let _ = win.hide();
+                }
+            }
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
