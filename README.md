@@ -11,6 +11,14 @@ A small Windows app that converts images, audio and video on your own PC.
 
 </div>
 
+<p align="center">
+  <img src="docs/screenshots/main.png" width="640" alt="Converter window">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/wheel.png" width="420" alt="Radial menu">
+</p>
+
 Nothing is uploaded. Every conversion runs locally with a bundled ffmpeg.
 
 ## Features
@@ -41,3 +49,7 @@ pnpm tauri dev
 Put a Windows `ffmpeg.exe` in `src-tauri/resources/` before building. Without it, `ffmpeg` on PATH is used.
 
 Releases are built by the `build` GitHub Actions workflow, which signs the update with `TAURI_SIGNING_PRIVATE_KEY`.
+
+## License
+
+[MIT](LICENSE). The bundled ffmpeg is licensed separately under its own terms.

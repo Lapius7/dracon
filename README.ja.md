@@ -11,6 +11,14 @@
 
 </div>
 
+<p align="center">
+  <img src="docs/screenshots/main.png" width="640" alt="変換ウィンドウ">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/wheel.png" width="420" alt="円形メニュー">
+</p>
+
 ファイルは外部に送信されません。変換はすべて、同梱の ffmpeg でこの PC の中で行います。
 
 ## 特長
@@ -41,3 +49,7 @@ pnpm tauri dev
 ビルド前に、Windows 用の `ffmpeg.exe` を `src-tauri/resources/` に置いてください。置かない場合は、PATH 上の `ffmpeg` を使います。
 
 リリースは GitHub Actions の `build` ワークフローで作られ、`TAURI_SIGNING_PRIVATE_KEY` で更新ファイルに署名します。
+
+## ライセンス
+
+[MIT](LICENSE) です。同梱の ffmpeg には別途そのライセンスが適用されます。
