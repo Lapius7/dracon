@@ -1,4 +1,4 @@
-# mikan
+# Dracon
 
 画像・音声・動画を、自分の PC の中だけで変換する Windows 向けの小さなアプリです。ファイルは外部に送信されません。
 
@@ -14,7 +14,7 @@ Tauri 2、React、同梱の ffmpeg で作られています。
 
 ```
 pnpm install
-cargo test -p mikan-core
+cargo test -p dracon-core
 pnpm tauri dev
 ```
 

@@ -29,18 +29,20 @@
 }
 
 :root {
-  --color-paper: oklch(98.5% 0.004 85);
-  --color-paper-2: oklch(96.5% 0.006 85);
-  --color-paper-3: oklch(93.5% 0.008 85);
-  --color-ink: oklch(24% 0.01 60);
-  --color-ink-2: oklch(48% 0.01 60);
-  --color-rule: oklch(88% 0.008 80);
-  --color-accent: oklch(66% 0.17 52);
-  --color-accent-ink: oklch(20% 0.04 52);
-  --color-focus: oklch(55% 0.18 255);
-  --color-danger: oklch(55% 0.2 27);
-  --color-ok: oklch(55% 0.13 150);
-  --font-body: "Segoe UI Variable", "Segoe UI", "Yu Gothic UI", system-ui, sans-serif;
+  color-scheme: dark;
+  --color-paper: oklch(17% 0.02 285);
+  --color-paper-2: oklch(21% 0.025 285);
+  --color-paper-3: oklch(26% 0.03 285);
+  --color-ink: oklch(96% 0.005 85);
+  --color-ink-2: oklch(72% 0.02 285);
+  --color-rule: oklch(32% 0.03 285);
+  --color-accent: oklch(74% 0.17 55);
+  --color-accent-ink: oklch(20% 0.05 50);
+  --color-focus: oklch(72% 0.14 290);
+  --color-danger: oklch(66% 0.2 25);
+  --color-ok: oklch(76% 0.15 155);
+  --color-violet: oklch(62% 0.18 290);
+  --font-body: "Segoe UI Variable Text", "Segoe UI", "Yu Gothic UI", system-ui, sans-serif;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast: 120ms;
 }
@@ -59,3 +61,9 @@ body {
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+@keyframes page-in { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+.page-in { animation: page-in 240ms var(--ease-out) both; }
+button:active:not(:disabled) { transform: scale(0.98); }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb { background: var(--color-paper-3); border-radius: 8px; border: 2px solid var(--color-paper); }

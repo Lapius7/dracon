@@ -1,4 +1,4 @@
-# mikan
+# Dracon
 
 A small Windows app that converts images, audio and video on your own PC. Nothing is uploaded.
 
@@ -14,7 +14,7 @@ Built with Tauri 2, React and a bundled ffmpeg.
 
 ```
 pnpm install
-cargo test -p mikan-core
+cargo test -p dracon-core
 pnpm tauri dev
 ```
 
