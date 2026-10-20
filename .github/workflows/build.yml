@@ -33,5 +33,4 @@ jobs:
           releaseName: Dracon v__VERSION__
           releaseBody: See the assets to download and install.
           releaseDraft: false
-          uploadUpdaterJson: true
           args: --bundles nsis
