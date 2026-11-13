@@ -29,3 +29,4 @@ jobs:
             --max-turns 15
             --model claude-sonnet-5-5
             --effort medium
+            --append-system-prompt "Never push directly to the repository's default branch (main or master). Make any change on a non-default branch (the pull request's branch, or a new claude/ branch) and leave merging to the user."
