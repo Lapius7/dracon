@@ -1,15 +1,33 @@
 <div align="center">
 
-# Dracon
+<p align="center">
+  <img src="docs/images/banner.png" alt="Dracon" width="100%">
+</p>
 
-A small Windows app that converts images, audio and video on your own PC.
+<p align="center"><b>English</b> | <a href="README.ja.md">日本語</a></p>
 
-[![Release](https://img.shields.io/github/v/release/Lapius7/dracon?style=flat-square&color=7c5cff)](https://github.com/Lapius7/dracon/releases/latest)
-![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-3b3e44?style=flat-square)
+<h1 align="center">Dracon</h1>
 
-**English** · [日本語](README.ja.md)
+<h3 align="center">Convert images, audio and video on your own PC.</h3>
+
+<p align="center">A small Windows app. Nothing is uploaded: every conversion runs locally with a bundled ffmpeg.</p>
+
+<p align="center">
+  <a href="https://github.com/Lapius7/dracon/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Lapius7/dracon?label=release&style=flat-square&color=e8833a&logo=github"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/Lapius7/dracon?style=flat-square&color=97ca00"></a>
+  <img alt="Windows 10 | 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4?style=flat-square">
+  <a href="https://tauri.app"><img alt="Tauri 2" src="https://img.shields.io/badge/Tauri-2-ffc131?logo=tauri&logoColor=black&style=flat-square"></a>
+  <a href="https://github.com/Lapius7/dracon/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Lapius7/dracon?style=flat-square&color=e3b341&logo=github"></a>
+  <a href="https://github.com/Lapius7/dracon/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/Lapius7/dracon?style=flat-square&color=3b82f6"></a>
+</p>
+
+<p align="center">
+  <a href="#features">Features</a> · <a href="#install">Install</a> · <a href="#development">Development</a>
+</p>
 
 </div>
+
+---
 
 <p align="center">
   <img src="docs/screenshots/main.png" width="640" alt="Converter window">
